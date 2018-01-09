@@ -33,9 +33,6 @@ def create_mysql_session(user, pw, host, db):
     session = sessionmaker(bind=engine)
     return session()
 
-(cfg['mysql']['user'], cfg['mysql']['password'],
-                cfg['mysql']['host'], cfg['mysql']['db'])
-
 
 def create_post(items):
     post_title = "Alexa Voice Deals for " + now.strftime("%B %d,%Y")
@@ -49,7 +46,7 @@ def create_post(items):
         new_price = item['FinalPrice']
         old_price_number = Decimal(sub(r'[^\d.]', '', old_price))
         new_price_number = Decimal(sub(r'[^\d.]', '', new_price))
-        percentage = round((1 - new_price/old_price) * 100, 0)
+        percentage = round((1 - new_price_number/old_price_number) * 100, 0)
         text = "[ / et_pb_text][ / et_pb_column][ / et_pb_row][ / et_pb_section][et_pb_section bb_built = \"1\" admin_label = \"Alexa Voice Deal\" fullwidth = \"off\" specialty = \"on\" _builder_version = \"3.0.89\" make_fullwidth = \"on\"][et_pb_column type = \"1_3\"][et_pb_image admin_label = \"Product Image\" _builder_version = \"3.0.89\" src = " + items['IMG'] + " show_in_lightbox = \"off\" url = \"http://amzn.to/2A9Vtor\" url_new_window = \"on\" use_overlay = \"off\" always_center_on_mobile = \"on\" force_fullwidth = \"off\" show_bottom_space = \"on\" /][ / et_pb_column][et_pb_column type = \"2_3\" specialty_columns = \"2\"][et_pb_row_inner admin_label = \"Row\"][et_pb_column_inner type = \"1_2\" saved_specialty_column_type = \"2_3\"][et_pb_text admin_label = \"Product Title\" _builder_version = \"3.0.89\" background_layout = \"light\"] < h2 > " + item['Utterance'] + " < / h2 > < h3 >" + new_price + " < / h3 > Sale: " + old_price + ", Save " + percentage + " % [ / et_pb_text][ / et_pb_column_inner][et_pb_column_inner type = \"1_2\" saved_specialty_column_type = \"2_3\"][et_pb_testimonial admin_label = \"Alexa Quote\" background_layout = \"light\" _builder_version = \"3.0.89\" custom_css_testimonial_author = \"display: none;\" custom_css_testimonial_meta = \"display: none;\" text_orientation = \"center\" url_new_window = \"off\" quote_icon = \"on\" use_background_color = \"on\" quote_icon_background_color = \"#f5f5f5\" portrait_border_radius = \"21\" saved_tabs = \"all\" border_radii_portrait = \"21\"] < p style = \"margin: 0 auto;\" > " + item['Utterance'] + " < / p >" \
                                                                "[ / et_pb_testimonial][ / et_pb_column_inner][ / et_pb_row_inner][et_pb_row_inner admin_label = \"Row\"][et_pb_column_inner type = \"4_4\"" \
                                                                "saved_specialty_column_type = \"2_3\"][et_pb_text admin_label = \"Two Cents\"" \
@@ -69,6 +66,15 @@ def write_post(session, post):
 
 
 def lambda_handler(event, context):
+    print('Getting items from dyamodb')
     items = get_dynamodb_items(table)
-    create_post(items)
+    print('There are {0} products'.format(len(items)))
+    post = create_post(items)
+    print('Post created')
+    session = create_mysql_session(cfg['mysql']['user'],
+                                   cfg['mysql']['password'],
+                                   cfg['mysql']['host'], cfg['mysql']['db'])
+    write_post(session, post)
+    print('Post written to Wordpress')
+
 
