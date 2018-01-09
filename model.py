@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, DateTime
+from sqlalchemy import Column, INTEGER, VARCHAR, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.mysql import BIGINT, TEXT, LONGTEXT
 
@@ -26,7 +26,7 @@ class Posts(Base):
     post_content_filtered = Column(LONGTEXT)
     post_parent = Column(BIGINT(20))
     guid = Column(VARCHAR(255))
-    menu_order = Column(Integer(11))
+    menu_order = Column(INTEGER)
     post_type = Column(VARCHAR(20))
     post_mime_type = Column(VARCHAR(100))
     comment_count = Column(BIGINT(20))

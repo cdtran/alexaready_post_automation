@@ -78,3 +78,14 @@ def lambda_handler(event, context):
     print('Post written to Wordpress')
 
 
+if __name__ == "__main__":
+    print('Getting items from dyamodb')
+    items = get_dynamodb_items(table)
+    print('There are {0} products'.format(len(items)))
+    post = create_post(items)
+    print('Post created')
+    session = create_mysql_session(cfg['mysql']['user'],
+                                   cfg['mysql']['password'],
+                                   cfg['mysql']['host'], cfg['mysql']['db'])
+    write_post(session, post)
+    print('Post written to Wordpress')
