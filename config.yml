@@ -5,3 +5,5 @@ mysql:
   db:
 dynamodb:
   name:
+amazon:
+  affiliate_tag:
