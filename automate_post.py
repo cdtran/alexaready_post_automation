@@ -54,7 +54,8 @@ def create_post(items):
         new_price = item['FinalPrice']
         old_price_number = Decimal(sub(r'[^\d.]', '', old_price))
         new_price_number = Decimal(sub(r'[^\d.]', '', new_price))
-        url = 'amazon.com'
+        url = 'https://www.amazon.com/{0}?tag={1}'.format(
+            item['HREF'], cfg['amazon']['affiliate_tag'])
         percentage = round((1 - new_price_number/old_price_number) * 100, 0)
         section = post_content.format(item['IMG'], url, item['Utterance'],
                                       item['FinalPrice'], item['BuyPrice'],
