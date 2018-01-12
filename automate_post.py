@@ -31,7 +31,7 @@ now = datetime.datetime.now()
 
 def get_dynamodb_items(dynamo_table):
     response = dynamo_table.query(KeyConditionExpression=Key('Date')
-                           .eq(now.strftime("%Y-%m-%d")))
+                                  .eq(now.strftime("%Y-%m-%d")))
     return response['Items']
 
 
@@ -47,6 +47,7 @@ def create_post(items):
     post_title = "Alexa Voice Deals for " + now.strftime("%B %d,%Y")
     post_name = "alexa-deals-" + now.strftime("%B").lower() + "-" + \
                 now.strftime("%d") + "-" + now.strftime("%Y")
+    guid='https://alexaready.com/deals/{0}'.format(post_name)
     post = heading
     for item in items:
         old_price = item['BuyPrice']
@@ -57,10 +58,12 @@ def create_post(items):
         percentage = round((1 - new_price_number/old_price_number) * 100, 0)
         section = post_content.format(item['IMG'], url, item['Utterance'],
                                       item['FinalPrice'], item['BuyPrice'],
-                                      percentage, item['Title'])
+                                      percentage, item['Utterance'],
+                                      item['Title'])
         post = post + section
 
     return Posts(post_date=now, post_date_gmt=now, post_content=post,
+                 post_modified=now, post_modified_gmt=now, guid=guid,
                  post_title=post_title, post_name=post_name)
 
 
@@ -91,5 +94,6 @@ if __name__ == "__main__":
     session = create_mysql_session(cfg['mysql']['user'],
                                    cfg['mysql']['password'],
                                    cfg['mysql']['host'], cfg['mysql']['db'])
+    print('Connected to MySQL Database')
     write_post(session, post)
     print('Post written to Wordpress')

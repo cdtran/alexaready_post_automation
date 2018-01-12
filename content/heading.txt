@@ -1,5 +1,5 @@
 [et_pb_section bb_built="1" fullwidth="off" specialty="off"][et_pb_row][et_pb_column type="4_4"][et_pb_text admin_label="The Deals Intro" _builder_version="3.0.89" background_layout="light"]
  <h1>The Deals</h1>
- Below you’ll find the latest deals exclusive to your Amazon Alexa device. To order, simply say the command to Alexa. Alexa will handle the rest.
+ Below you'll find the latest deals exclusive to your Amazon Alexa device. To order, simply say the command to Alexa. Alexa will handle the rest.
 
- To learn more about each product, click on the image or visit the ‘Learn more on Amazon’ link. We added our two cents to each of the products. Let us know what you think! Happy saving!
+ To learn more about each product, click on the image or visit the 'Learn more on Amazon' link. We added our two cents to each of the products. Let us know what you think! Happy saving!
